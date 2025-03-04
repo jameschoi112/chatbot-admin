@@ -32,6 +32,40 @@ const LoginPage = ({ setIsAuthenticated }) => {
     setIsLoading(true);
     setError('');
 
+    // 임시 admin 계정 체크 추가
+    if (username === 'admin' && password === 'admin') {
+      // 임시 사용자 정보 생성
+      const mockUser = {
+        id: 1,
+        username: 'admin',
+        email: 'admin@example.com',
+        role: 'ADMIN'
+      };
+
+      // 임시 토큰 생성 (실제로는 의미 없는 문자열)
+      const mockToken = 'mock-jwt-token-for-temporary-access';
+      const mockRefreshToken = 'mock-refresh-token-for-temporary-access';
+
+      // 토큰과 사용자 정보 저장
+      localStorage.setItem('token', mockToken);
+      localStorage.setItem('refresh_token', mockRefreshToken);
+      localStorage.setItem('user', JSON.stringify(mockUser));
+      localStorage.setItem('user_id', mockUser.id.toString());
+
+      // axios 기본 헤더에 토큰 설정
+      axios.defaults.headers.common['Authorization'] = `Bearer ${mockToken}`;
+
+      // 인증 상태 업데이트
+      setIsAuthenticated(true);
+
+      // 로딩 상태 종료
+      setIsLoading(false);
+
+      // 대시보드로 이동
+      navigate('/');
+      return;
+    }
+
     try {
       // Django JWT 토큰 엔드포인트로 변경
       const response = await axios.post(`${API_URL}/auth/token/`, {
@@ -193,6 +227,11 @@ const LoginPage = ({ setIsAuthenticated }) => {
             <span className="block sm:inline">{error}</span>
           </div>
         )}
+
+        {/* 임시 로그인 안내 메시지 */}
+        <div className="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded relative">
+          <span className="block sm:inline font-medium">로그인 계정 : admin / admin</span>
+        </div>
 
         {/* 폼 */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
