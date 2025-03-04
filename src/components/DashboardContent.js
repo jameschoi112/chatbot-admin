@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, BarChart2, Activity, DollarSign, PlusCircle, MessageSquare, ExternalLink } from 'lucide-react';
+import {  PlusCircle, MessageSquare, ExternalLink } from 'lucide-react';
 import {
  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   ResponsiveContainer, AreaChart, Area
@@ -111,7 +111,7 @@ const DashboardContent = () => {
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold text-gray-700">실시간 봇 현황</h2>
-            <Bot className="text-sky-500" size={20} />
+
           </div>
           <div className="flex justify-between">
             <div className="text-center">
@@ -133,7 +133,7 @@ const DashboardContent = () => {
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold text-gray-700">문서 현황</h2>
-            <BarChart2 className="text-sky-500" size={20} />
+
           </div>
           <div className="flex justify-between">
             <div className="text-center">
@@ -155,7 +155,7 @@ const DashboardContent = () => {
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold text-gray-700">챗봇 평균 사용량</h2>
-            <Activity className="text-sky-500" size={20} />
+
           </div>
           <div className="flex flex-col items-center justify-center h-16">
             <p className="text-3xl font-bold text-sky-500">1,245</p>
@@ -167,7 +167,7 @@ const DashboardContent = () => {
         <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-lg font-semibold text-gray-700">챗봇 평균 사용 비용</h2>
-            <DollarSign className="text-sky-500" size={20} />
+
           </div>
           <div className="flex flex-col items-center justify-center h-16">
             <p className="text-3xl font-bold text-sky-500">₩32,500</p>
@@ -181,7 +181,7 @@ const DashboardContent = () => {
         {/* 평균 챗봇 사용량 그래프 */}
         <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-700">평균 챗봇 사용량</h2>
+            <h2 className="text-lg font-semibold text-gray-700">월 평균 챗봇 사용량</h2>
             <div className="px-3 py-1 bg-blue-50 text-blue-600 rounded-md text-xs font-medium">월별 통계</div>
           </div>
           <div className="h-64">
