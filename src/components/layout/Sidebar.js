@@ -77,10 +77,12 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
                 onClick={() => handleMenuClick(item.id, item.path, hasSubMenu)}
               >
                 <div className="flex items-center">
-                  <div className={`w-8 h-8 flex items-center justify-center rounded-md mr-2 ${
+                  <div className={`w-8 h-8 flex items-center justify-center rounded-md mr-2 transition-colors duration-200 ${
                     isActive ? 'text-white' : 'text-gray-400 group-hover:text-sky-400'
                   }`}>
-                    <Icon size={18} strokeWidth={2} className="transition-transform duration-200" />
+                    <Icon size={18} strokeWidth={2} className={`transition-transform duration-300 ${
+                      isActive && isExpanded ? 'scale-110' : ''
+                    }`} />
                   </div>
                   <span className={`text-sm ${isActive ? 'font-medium' : 'font-normal'}`}>{item.label}</span>
                 </div>
@@ -91,29 +93,37 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
                 )}
               </button>
 
-              {/* 하위 메뉴 아이템 */}
-              {hasSubMenu && isExpanded && (
-                <div className="ml-4 pl-4 mt-0.5 space-y-0.5 border-l border-gray-700">
-                  {item.subMenuItems.map((subItem) => {
-                    const isSubActive = activeMenu === subItem.id;
+              {/* 하위 메뉴 아이템 - 애니메이션 적용 */}
+              {hasSubMenu && (
+                <div
+                  className={`ml-4 pl-4 mt-0.5 border-l border-gray-700 overflow-hidden transition-all duration-300 ease-in-out ${
+                    isExpanded
+                      ? 'max-h-40 opacity-100'
+                      : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <div className="py-1 space-y-0.5">
+                    {item.subMenuItems.map((subItem) => {
+                      const isSubActive = activeMenu === subItem.id;
 
-                    return (
-                      <button
-                        key={subItem.id}
-                        className={`flex items-center w-full text-sm rounded-md py-2 px-3 transition-all duration-200 ${
-                          isSubActive
-                            ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
-                        }`}
-                        onClick={(e) => handleSubMenuClick(subItem.path, e)}
-                      >
-                        <div className={`h-1 w-1 rounded-full mr-3 transition-all duration-200 ${
-                          isSubActive ? 'bg-sky-400' : 'bg-gray-500'
-                        }`}></div>
-                        <span className={isSubActive ? 'font-medium' : 'font-normal'}>{subItem.label}</span>
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={subItem.id}
+                          className={`flex items-center w-full text-sm rounded-md py-2 px-3 transition-all duration-200 transform ${
+                            isSubActive
+                              ? 'bg-gray-800 text-white'
+                              : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
+                          } ${isExpanded ? 'translate-x-0' : '-translate-x-4'}`}
+                          onClick={(e) => handleSubMenuClick(subItem.path, e)}
+                        >
+                          <div className={`h-1 w-1 rounded-full mr-3 transition-all duration-200 ${
+                            isSubActive ? 'bg-sky-400' : 'bg-gray-500'
+                          }`}></div>
+                          <span className={isSubActive ? 'font-medium' : 'font-normal'}>{subItem.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
