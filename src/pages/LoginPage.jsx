@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { EyeIcon, EyeOffIcon, LockIcon, UserIcon, X, Mail, Building, UserCircle ,Bot,AlertCircle, Info, } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, LockIcon, UserIcon, X, Mail, Building, User ,Bot,AlertCircle, Info, } from 'lucide-react';
 
 // 프록시를 통해 상대 경로 사용
 const API_URL = 'https://aichat.metadium.club/api';
@@ -548,7 +548,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
                   </label>
                   <div className="relative rounded-md shadow-sm">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <UserCircle className="h-5 w-5 text-gray-400" />
+                      <User className="h-5 w-5 text-gray-400" />
                     </div>
                     <select
                       id="signup-role"

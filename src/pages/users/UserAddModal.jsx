@@ -8,8 +8,7 @@ import {
   ToggleRight,
   Key,
   AlertCircle,
-  Check,
-  UserCircle
+  Check
 } from 'lucide-react';
 
 const UserAddModal = ({ isOpen, onClose, onSuccess }) => {
@@ -156,7 +155,7 @@ const UserAddModal = ({ isOpen, onClose, onSuccess }) => {
         {/* 모달 헤더 */}
         <div className="bg-gradient-to-r from-sky-600 to-blue-700 text-white px-6 py-4 flex justify-between items-center">
           <h2 className="text-xl font-semibold flex items-center">
-            <UserCircle className="mr-2" size={22} />
+            <User className="mr-2" size={22} />
             관리자 계정 추가
           </h2>
           <button
