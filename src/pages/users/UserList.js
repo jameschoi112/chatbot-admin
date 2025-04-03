@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Filter,
@@ -12,10 +11,12 @@ import {
   Building,
   AlertTriangle,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  RefreshCw
 } from 'lucide-react';
 import Layout from '../../components/layout/Layout';
 import Chat from '../../components/Chat';
+import UserAddModal from './UserAddModal';
 
 // 임시 사용자 데이터
 const userData = [
@@ -102,7 +103,6 @@ const userData = [
 ];
 
 const UserList = () => {
-  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('name');
   const [sortDirection, setSortDirection] = useState('asc');
@@ -110,10 +110,14 @@ const UserList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
+  const [users, setUsers] = useState(userData);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const itemsPerPage = 5;
 
   // 필터링 함수
-  const filteredUsers = userData.filter(user => {
+  const filteredUsers = users.filter(user => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -157,15 +161,44 @@ const UserList = () => {
     }
   };
 
-  // 사용자 추가 페이지로 이동
+  // 사용자 추가 모달 열기
   const handleAddUser = () => {
-    navigate('/users/add');
+    setIsAddModalOpen(true);
+  };
+
+  // 사용자 추가 성공 처리
+  const handleAddSuccess = () => {
+    refreshUserList();
+  };
+
+  // 사용자 목록 새로고침
+  const refreshUserList = () => {
+    setIsRefreshing(true);
+
+    // API 호출 시뮬레이션
+    setTimeout(() => {
+      // 실제 구현에서는 API에서 새로운 사용자 목록을 가져옵니다
+      // 여기서는 임의로 새 사용자를 추가합니다
+      const newUser = {
+        id: Math.floor(Math.random() * 1000) + 10,
+        name: '신규사용자',
+        email: `new${Math.floor(Math.random() * 100)}@cplabs.com`,
+        company: 'CPLABS',
+        role: 'user',
+        status: 'active',
+        lastLogin: '-',
+        createdAt: new Date().toISOString().split('T')[0]
+      };
+
+      setUsers(prev => [newUser, ...prev]);
+      setIsRefreshing(false);
+    }, 800);
   };
 
   // 사용자 편집
   const handleEditUser = (userId) => {
     console.log(`사용자 편집: ID ${userId}`);
-    // 실제 구현에서는 편집 페이지로 이동
+    // 실제 구현에서는 편집 모달 표시
   };
 
   // 삭제 확인 모달 표시
@@ -174,13 +207,16 @@ const UserList = () => {
     setShowDeleteConfirm(true);
   };
 
-  // 실제 삭제 처리 (여기서는 시뮬레이션만)
+  // 실제 삭제 처리
   const confirmDelete = () => {
     // 실제 구현에서는 API 호출 등을 통해 사용자를 삭제
     console.log(`사용자 삭제: ${userToDelete.name} (ID: ${userToDelete.id})`);
+
+    // 목록에서 삭제된 사용자 제거
+    setUsers(prev => prev.filter(user => user.id !== userToDelete.id));
+
     setShowDeleteConfirm(false);
     setUserToDelete(null);
-    // 삭제 후 상태 업데이트 로직이 필요함
   };
 
   // 페이지 변경 함수
@@ -198,7 +234,7 @@ const UserList = () => {
             <h1 className="text-2xl font-bold text-gray-800">사용자 관리</h1>
             <button
               onClick={handleAddUser}
-              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md transition-colors shadow-md flex items-center space-x-2"
+              className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-md transition-colors shadow-md flex items-center space-x-2"
             >
               <UserPlus size={18} />
               <span>사용자 추가</span>
@@ -207,7 +243,7 @@ const UserList = () => {
 
           {/* 검색 및 필터 영역 */}
           <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 items-center">
               {/* 검색 필드 */}
               <div className="flex-1 min-w-[240px]">
                 <div className="relative">
@@ -237,6 +273,16 @@ const UserList = () => {
                   </select>
                 </div>
               </div>
+
+              {/* 새로고침 버튼 */}
+              <button
+                onClick={refreshUserList}
+                className="p-2 text-sky-600 hover:text-sky-800 hover:bg-sky-50 rounded-lg transition-colors"
+                disabled={isRefreshing}
+                title="새로고침"
+              >
+                <RefreshCw size={18} className={isRefreshing ? "animate-spin" : ""} />
+              </button>
             </div>
           </div>
 
@@ -416,12 +462,21 @@ const UserList = () => {
         </div>
       </Layout>
 
+      {/* 사용자 추가 모달 */}
+      <UserAddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={handleAddSuccess}
+      />
+
       {/* 삭제 확인 모달 */}
       {showDeleteConfirm && userToDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-auto">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-6 max-w-sm mx-auto animate-scale-up">
             <div className="text-center mb-6">
-              <AlertTriangle size={48} className="text-red-500 mx-auto mb-4" />
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle size={30} className="text-red-500" />
+              </div>
               <h3 className="text-lg font-bold text-gray-900">사용자 삭제 확인</h3>
               <p className="text-gray-600 mt-2">
                 '{userToDelete.name}' 사용자를 정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.

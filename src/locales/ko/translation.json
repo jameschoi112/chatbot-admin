@@ -1,0 +1,66 @@
+{
+  "header": {
+    "language": "언어",
+    "myPage": "마이페이지",
+    "changePassword": "비밀번호 변경",
+    "logout": "로그아웃",
+    "plan": "사용 중인 요금제",
+    "free": "무료",
+    "paid": "유료",
+    "notifications": "새로운 알림"
+  },
+  "dashboard": {
+    "title": "대시보드",
+    "createNewBot": "새 봇 만들기",
+    "stats": {
+      "botStatus": "실시간 봇 현황",
+      "total": "전체",
+      "active": "활성화 봇",
+      "inactive": "비활성 봇",
+      "docStatus": "문서 현황",
+      "docEmbedding": "문서 임베딩",
+      "pending": "대기 중",
+      "avgUsage": "챗봇 평균 사용량",
+      "dailyRequests": "일간 평균 요청 수",
+      "avgCost": "챗봇 평균 사용 비용",
+      "dailyCost": "일간 평균 사용 금액"
+    },
+    "charts": {
+      "monthlyUsage": "월 평균 챗봇 사용량",
+      "monthlyCost": "월 평균 사용금액",
+      "monthlyStats": "월별 통계",
+      "usage": "사용량",
+      "cost": "금액"
+    },
+    "recentBots": {
+      "title": "최근 생성된 봇",
+      "created": "생성",
+      "status": {
+        "active": "활성",
+        "inactive": "비활성"
+      },
+      "viewMore": "더보기"
+    },
+    "topBots": {
+      "title": "가장 사용이 많은 봇",
+      "viewMore": "더보기"
+    }
+  },
+  "sidebar": {
+    "dashboard": "대시보드",
+    "botManagement": "챗봇 관리",
+    "createBot": "새 봇 만들기",
+    "documents": "문서 관리",
+    "analytics": "사용 통계",
+    "userManagement": "관리자 목록",
+    "userList": "관리자 계정 목록",
+    "addUser": "관리자 계정 추가",
+    "settings": "설정",
+    "help": "도움말"
+  },
+  "chat": {
+    "title": "ChatBot 도우미",
+    "placeholder": "메시지를 입력하세요...",
+    "typing": "입력 중..."
+  }
+}

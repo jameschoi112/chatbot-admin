@@ -1,0 +1,66 @@
+{
+  "header": {
+    "language": "Bahasa",
+    "myPage": "Halaman Saya",
+    "changePassword": "Tukar Kata Laluan",
+    "logout": "Log Keluar",
+    "plan": "Pelan Semasa",
+    "free": "Percuma",
+    "paid": "Premium",
+    "notifications": "Pemberitahuan Baharu"
+  },
+  "dashboard": {
+    "title": "Papan Pemuka",
+    "createNewBot": "Cipta Bot Baharu",
+    "stats": {
+      "botStatus": "Status Bot",
+      "total": "Jumlah",
+      "active": "Aktif",
+      "inactive": "Tidak Aktif",
+      "docStatus": "Status Dokumen",
+      "docEmbedding": "Terbenam",
+      "pending": "Menunggu",
+      "avgUsage": "Purata Penggunaan Bot",
+      "dailyRequests": "Permintaan Harian",
+      "avgCost": "Purata Kos Penggunaan",
+      "dailyCost": "Kos Harian"
+    },
+    "charts": {
+      "monthlyUsage": "Penggunaan Bot Bulanan",
+      "monthlyCost": "Kos Bulanan",
+      "monthlyStats": "Statistik Bulanan",
+      "usage": "Penggunaan",
+      "cost": "Kos"
+    },
+    "recentBots": {
+      "title": "Bot Terbaru Dicipta",
+      "created": "Dicipta",
+      "status": {
+        "active": "Aktif",
+        "inactive": "Tidak Aktif"
+      },
+      "viewMore": "Lihat Lagi"
+    },
+    "topBots": {
+      "title": "Bot Paling Banyak Digunakan",
+      "viewMore": "Lihat Lagi"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Papan Pemuka",
+    "botManagement": "Pengurusan Bot",
+    "createBot": "Cipta Bot Baharu",
+    "documents": "Pengurusan Dokumen",
+    "analytics": "Analitik",
+    "userManagement": "Pengurusan Pengguna",
+    "userList": "Senarai Pengguna",
+    "addUser": "Tambah Pengguna",
+    "settings": "Tetapan",
+    "help": "Bantuan"
+  },
+  "chat": {
+    "title": "Pembantu ChatBot",
+    "placeholder": "Taip mesej anda...",
+    "typing": "Menaip..."
+  }
+}

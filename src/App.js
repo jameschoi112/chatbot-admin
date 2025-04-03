@@ -1,5 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 import AdminDashboard from './components/AdminDashboard';
 import LoginPage from './pages/LoginPage';
 import CreateBot from './pages/CreateBot';
@@ -30,44 +33,46 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {/* 공개 경로 */}
-        <Route path="/login" element={
-          isAuthenticated ? <Navigate to="/" replace /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />
-        } />
+    <I18nextProvider i18n={i18n}>
+      <Router>
+        <Routes>
+          {/* 공개 경로 */}
+          <Route path="/login" element={
+            isAuthenticated ? <Navigate to="/" replace /> : <LoginPage setIsAuthenticated={setIsAuthenticated} />
+          } />
 
-        {/* 보호된 경로 */}
-        <Route path="/" element={
-          isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" replace />
-        } />
+          {/* 보호된 경로 */}
+          <Route path="/" element={
+            isAuthenticated ? <AdminDashboard /> : <Navigate to="/login" replace />
+          } />
 
-        {/* 봇 생성 페이지 추가 */}
-        <Route path="/create-bot" element={
-          isAuthenticated ? <CreateBot /> : <Navigate to="/login" replace />
-        } />
+          {/* 봇 생성 페이지 추가 */}
+          <Route path="/create-bot" element={
+            isAuthenticated ? <CreateBot /> : <Navigate to="/login" replace />
+          } />
 
-        {/* 기타 경로는 모두 대시보드 또는 로그인으로 리다이렉트 */}
-        <Route path="*" element={
-          isAuthenticated ? <Navigate to="/" replace /> : <Navigate to="/login" replace />
-        } />
-        <Route path="/bots" element={
-          isAuthenticated ? <BotList /> : <Navigate to="/login" replace />
-        } />
+          {/* 기타 경로는 모두 대시보드 또는 로그인으로 리다이렉트 */}
+          <Route path="*" element={
+            isAuthenticated ? <Navigate to="/" replace /> : <Navigate to="/login" replace />
+          } />
+          <Route path="/bots" element={
+            isAuthenticated ? <BotList /> : <Navigate to="/login" replace />
+          } />
 
-        <Route path="/bots/:botId" element={
-          isAuthenticated ? <BotDetail /> : <Navigate to="/login" replace />
-        } />
+          <Route path="/bots/:botId" element={
+            isAuthenticated ? <BotDetail /> : <Navigate to="/login" replace />
+          } />
 
-        <Route path="/users" element={
-          isAuthenticated ? <UserList /> : <Navigate to="/login" replace />
-        } />
+          <Route path="/users" element={
+            isAuthenticated ? <UserList /> : <Navigate to="/login" replace />
+          } />
 
-        <Route path="/users/add" element={
-          isAuthenticated ? <UserAdd /> : <Navigate to="/login" replace />
-        } />
-      </Routes>
-    </Router>
+          <Route path="/users/add" element={
+            isAuthenticated ? <UserAdd /> : <Navigate to="/login" replace />
+          } />
+        </Routes>
+      </Router>
+    </I18nextProvider>
   );
 }
 

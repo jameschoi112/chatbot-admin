@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './i18n'; // i18n 설정을 가장 먼저 임포트
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';

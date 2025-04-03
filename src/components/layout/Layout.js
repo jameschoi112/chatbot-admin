@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 
 const Layout = ({ children, activeMenu = 'dashboard' }) => {
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-blue-50">
       <Header />
 
       <div className="flex flex-1 overflow-hidden">

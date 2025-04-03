@@ -1,0 +1,66 @@
+{
+  "header": {
+    "language": "Language",
+    "myPage": "My Page",
+    "changePassword": "Change Password",
+    "logout": "Logout",
+    "plan": "Current Plan",
+    "free": "Free",
+    "paid": "Premium",
+    "notifications": "New Notifications"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "createNewBot": "Create New Bot",
+    "stats": {
+      "botStatus": "Bot Status",
+      "total": "Total",
+      "active": "Active",
+      "inactive": "Inactive",
+      "docStatus": "Document Status",
+      "docEmbedding": "Embedded",
+      "pending": "Pending",
+      "avgUsage": "Average Bot Usage",
+      "dailyRequests": "Daily Requests",
+      "avgCost": "Average Usage Cost",
+      "dailyCost": "Daily Cost"
+    },
+    "charts": {
+      "monthlyUsage": "Monthly Bot Usage",
+      "monthlyCost": "Monthly Cost",
+      "monthlyStats": "Monthly Stats",
+      "usage": "Usage",
+      "cost": "Cost"
+    },
+    "recentBots": {
+      "title": "Recently Created Bots",
+      "created": "Created",
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "viewMore": "View More"
+    },
+    "topBots": {
+      "title": "Most Used Bots",
+      "viewMore": "View More"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "botManagement": "Bot Management",
+    "createBot": "Create New Bot",
+    "documents": "Document Management",
+    "analytics": "Analytics",
+    "userManagement": "User Management",
+    "userList": "User List",
+    "addUser": "Add User",
+    "settings": "Settings",
+    "help": "Help"
+  },
+  "chat": {
+    "title": "ChatBot Assistant",
+    "placeholder": "Type your message...",
+    "typing": "Typing..."
+  }
+}

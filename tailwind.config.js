@@ -19,6 +19,9 @@ module.exports = {
         'fadeLeftIn': 'fadeLeftIn 0.5s ease-out',
         'slideDown': 'slideDown 0.3s ease-out',
         'pulse': 'pulse 1.5s ease-in-out infinite',
+        // 새로 추가된 애니메이션
+        'scale-up': 'scaleUp 0.3s ease-out',
+        'background-fade': 'backgroundFade 0.3s ease-out',
       },
       keyframes: {
         fadeRightIn: {
@@ -36,6 +39,15 @@ module.exports = {
         pulse: {
           '0%, 100%': { opacity: 1 },
           '50%': { opacity: 0.5 },
+        },
+        // 새로 추가된 키프레임
+        scaleUp: {
+          '0%': { transform: 'scale(0.95)', opacity: 0 },
+          '100%': { transform: 'scale(1)', opacity: 1 },
+        },
+        backgroundFade: {
+          '0%': { backgroundColor: 'rgba(0, 0, 0, 0)' },
+          '100%': { backgroundColor: 'rgba(0, 0, 0, 0.5)' },
         },
       },
     },

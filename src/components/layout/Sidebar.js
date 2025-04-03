@@ -1,40 +1,43 @@
+
 import React, { useState } from 'react';
 import { Home, Bot, FileText, BarChart2, Users, Settings, HelpCircle, PlusCircle, ChevronRight, List, UserPlus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-// 메뉴 아이템 데이터
-const menuItems = [
-  { id: 'dashboard', label: '대시보드', icon: Home, path: '/' },
-  {
-    id: 'bots',
-    label: '봇 관리',
-    icon: Bot,
-    path: '/bots',
-    hasSubMenu: true,
-    subMenuItems: [
-      { id: 'bot-list', label: '봇 관리', icon: Bot, path: '/bots' },
-      { id: 'create-bot', label: '새 봇 만들기', icon: PlusCircle, path: '/create-bot' }
-    ]
-  },
-  { id: 'documents', label: '문서 관리', icon: FileText, path: '/documents' },
-  { id: 'analytics', label: '사용 통계', icon: BarChart2, path: '/analytics' },
-  {
-    id: 'users',
-    label: '사용자 관리',
-    icon: Users,
-    path: '/users',
-    hasSubMenu: true,
-    subMenuItems: [
-      { id: 'user-list', label: '사용자 목록', icon: List, path: '/users' },
-      { id: 'user-add', label: '사용자 추가', icon: UserPlus, path: '/users/add' }
-    ]
-  },
-  { id: 'settings', label: '설정', icon: Settings, path: '/settings' }
-];
+import { useTranslation } from 'react-i18next';
 
 const Sidebar = ({ activeMenu = 'dashboard' }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [expandedMenus, setExpandedMenus] = useState([]); // 기본적으로 모든 메뉴는 닫혀있음
+
+  // 메뉴 아이템 데이터
+  const getMenuItems = () => [
+    { id: 'dashboard', label: t('sidebar.dashboard'), icon: Home, path: '/' },
+    {
+      id: 'bots',
+      label: t('sidebar.botManagement'),
+      icon: Bot,
+      path: '/bots',
+      hasSubMenu: true,
+      subMenuItems: [
+        { id: 'bot-list', label: t('sidebar.botManagement'), icon: Bot, path: '/bots' },
+        { id: 'create-bot', label: t('sidebar.createBot'), icon: PlusCircle, path: '/create-bot' }
+      ]
+    },
+    { id: 'documents', label: t('sidebar.documents'), icon: FileText, path: '/documents' },
+    { id: 'analytics', label: t('sidebar.analytics'), icon: BarChart2, path: '/analytics' },
+    {
+      id: 'users',
+      label: t('sidebar.userManagement'),
+      icon: Users,
+      path: '/users',
+      hasSubMenu: true,
+      subMenuItems: [
+        { id: 'user-list', label: t('sidebar.userList'), icon: List, path: '/users' }
+
+      ]
+    },
+    { id: 'settings', label: t('sidebar.settings'), icon: Settings, path: '/settings' }
+  ];
 
   const handleMenuClick = (menuId, path, hasSubMenu) => {
     if (hasSubMenu) {
@@ -54,6 +57,8 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
     e.stopPropagation(); // 상위 메뉴 클릭 이벤트가 발생하지 않도록 함
     navigate(path);
   };
+
+  const menuItems = getMenuItems();
 
   return (
     <aside className="bg-gray-900 text-white flex flex-col w-64 font-['Inter','Pretendard',sans-serif]">
@@ -84,7 +89,7 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
                       isActive && isExpanded ? 'scale-110' : ''
                     }`} />
                   </div>
-                  <span className={`text-sm ${isActive ? 'font-medium' : 'font-normal'}`}>{item.label}</span>
+                  <span className={`text-sm font-semibold ${isActive ? 'font-bold' : 'font-semibold'}`}>{item.label}</span>
                 </div>
                 {hasSubMenu && (
                   <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : 'rotate-0'}`}>
@@ -119,7 +124,7 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
                           <div className={`h-1 w-1 rounded-full mr-3 transition-all duration-200 ${
                             isSubActive ? 'bg-sky-400' : 'bg-gray-500'
                           }`}></div>
-                          <span className={isSubActive ? 'font-medium' : 'font-normal'}>{subItem.label}</span>
+                          <span className={isSubActive ? 'font-bold' : 'font-medium'}>{subItem.label}</span>
                         </button>
                       );
                     })}
@@ -136,7 +141,7 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
           <div className="w-8 h-8 flex items-center justify-center rounded-md mr-2 group-hover:text-sky-400">
             <HelpCircle size={18} strokeWidth={2} />
           </div>
-          <span className="text-sm">도움말</span>
+          <span className="text-sm font-semibold">{t('sidebar.help')}</span>
         </button>
       </div>
     </aside>

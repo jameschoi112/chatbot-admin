@@ -185,7 +185,7 @@ const BotList = () => {
             <h1 className="text-2xl font-bold text-gray-800">봇 관리</h1>
             <button
               onClick={() => navigate('/create-bot')}
-              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md transition-colors shadow-md flex items-center space-x-2"
+              className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-md transition-colors shadow-md flex items-center space-x-2"
             >
               <span>새 봇 만들기</span>
             </button>

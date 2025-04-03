@@ -126,7 +126,7 @@ const Chat = () => {
         style={{ zIndex: 50, maxHeight: '600px' }}
       >
         {/* 채팅창 헤더 */}
-        <div className="bg-gradient-to-r from-sky-500 to-sky-600 text-white p-4 flex justify-between items-center">
+        <div className="bg-gradient-to-r from-blue-800 to-sky-700 text-white p-4 flex justify-between items-center">
           <div className="flex items-center">
             <Bot size={20} className="mr-2" />
             <h3 className="font-semibold">ChatBot 도우미</h3>
