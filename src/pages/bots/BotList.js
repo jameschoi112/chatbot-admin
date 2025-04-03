@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Search,
-  Filter,
-  ArrowDown,
-  ArrowUp,
-  ExternalLink,
-  MessageCircle,
+  ChevronDown,
   Trash2,
+  MessageCircle,
   AlertTriangle
 } from 'lucide-react';
-import Layout from '../../components/layout/Layout'; // 이전: '../layout/Layout'
-import Chat from '../../components/Chat'; // 이전: '../Chat'
+import Layout from '../../components/layout/Layout';
+import Chat from '../../components/Chat';
 
 // 임시 봇 데이터
 const botData = [
@@ -94,6 +91,79 @@ const botData = [
   }
 ];
 
+// 커스텀 드롭다운 컴포넌트
+const CustomDropdown = ({ value, onChange, options }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // 드롭다운 외부 클릭 감지
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // 선택된 항목의 라벨 찾기
+  const selectedOption = options.find(option => option.value === value);
+
+  return (
+    <div className="relative w-48" ref={dropdownRef}>
+      <button
+        type="button"
+        className="flex items-center justify-between w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span>{selectedOption?.label}</span>
+        <ChevronDown size={16} className={`transition-transform duration-200 ${isOpen ? 'transform rotate-180' : ''}`} />
+      </button>
+
+      {isOpen && (
+        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg py-1 overflow-hidden">
+          {options.map((option) => (
+            <div
+              key={option.value}
+              className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-gray-100 ${value === option.value ? 'bg-sky-50 text-sky-700' : 'text-gray-700'}`}
+              onClick={() => {
+                onChange(option.value);
+                setIsOpen(false);
+              }}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// 테이블 헤더 컴포넌트
+const TableHeader = ({ label, field, sortField, sortDirection, onSort }) => {
+  return (
+    <th
+      scope="col"
+      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+      onClick={() => onSort(field)}
+    >
+      <div className="flex items-center">
+        {label}
+        <span className="ml-1 text-gray-400">
+          {sortField === field && (
+            sortDirection === 'asc' ? '↑' : '↓'
+          )}
+        </span>
+      </div>
+    </th>
+  );
+};
+
 const BotList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
@@ -102,6 +172,14 @@ const BotList = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [botToDelete, setBotToDelete] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  // 상태 필터 옵션
+  const statusOptions = [
+    { value: 'all', label: '모든 상태' },
+    { value: 'active', label: '활성 봇' },
+    { value: 'inactive', label: '비활성 봇' },
+  ];
 
   // 필터링 함수
   const filteredBots = botData.filter(bot => {
@@ -145,35 +223,36 @@ const BotList = () => {
   };
 
   // 삭제 확인 모달 표시
-  const handleDeleteClick = (bot) => {
+  const handleDeleteClick = (e, bot) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
     setBotToDelete(bot);
     setShowDeleteConfirm(true);
   };
 
+  // 채팅 시뮬레이션
+  const handleChatClick = (e, bot) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
+    console.log(`채팅 시작: ${bot.name} (ID: ${bot.id})`);
+    // 실제 구현에서는 채팅 인터페이스 열기
+  };
+
   // 실제 삭제 처리 (여기서는 시뮬레이션만)
   const confirmDelete = () => {
-    // 실제 구현에서는 API 호출 등을 통해 봇을 삭제
     console.log(`봇 삭제: ${botToDelete.name} (ID: ${botToDelete.id})`);
     setShowDeleteConfirm(false);
     setBotToDelete(null);
     // 삭제 후 상태 업데이트 로직이 필요함
   };
 
-  // 채팅 시뮬레이션 (여기서는 콘솔 로그만)
-  const handleChatClick = (bot) => {
-    console.log(`채팅 시작: ${bot.name} (ID: ${bot.id})`);
-    // 실제 구현에서는 채팅 인터페이스 열기
-  };
-
   // 각 상태 뱃지의 스타일 설정
   const getStatusBadgeStyle = (status) => {
     switch (status) {
       case 'active':
-        return 'border-green-500 text-green-700';
+        return 'bg-green-100 border-green-500 text-green-700';
       case 'inactive':
-        return 'border-gray-400 text-gray-600';
+        return 'bg-gray-100 border-gray-400 text-gray-600';
       default:
-        return 'border-gray-400 text-gray-600';
+        return 'bg-gray-100 border-gray-400 text-gray-600';
     }
   };
 
@@ -182,27 +261,29 @@ const BotList = () => {
       <Layout activeMenu="bots">
         <div className="container mx-auto px-4 py-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">봇 관리</h1>
+            <h1 className="text-2xl font-bold text-gray-800">챗봇 관리</h1>
             <button
               onClick={() => navigate('/create-bot')}
-              className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-md transition-colors shadow-md flex items-center space-x-2"
+              className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-4 py-2 rounded-md transition-colors shadow-md"
             >
-              <span>새 봇 만들기</span>
+              새 봇 만들기
             </button>
           </div>
 
           {/* 검색 및 필터 영역 */}
-          <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-            <div className="flex flex-wrap gap-4">
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+            <div className="flex flex-wrap gap-6 items-center">
               {/* 검색 필드 */}
               <div className="flex-1 min-w-[240px]">
-                <div className="relative">
+                <div className={`relative border ${isSearchFocused ? 'border-sky-500 ring-2 ring-sky-100' : 'border-gray-300'} rounded-lg transition-all duration-200`}>
                   <input
                     type="text"
                     placeholder="봇 이름 또는 설명 검색..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500"
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg focus:outline-none"
                   />
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
                 </div>
@@ -210,17 +291,13 @@ const BotList = () => {
 
               {/* 상태 필터 */}
               <div className="w-auto">
-                <div className="flex items-center bg-white border border-gray-300 rounded-lg px-3 py-2">
-                  <Filter size={18} className="text-gray-400 mr-2" />
-                  <select
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-600">상태:</span>
+                  <CustomDropdown
                     value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                    className="bg-transparent focus:outline-none text-gray-700"
-                  >
-                    <option value="all">모든 상태</option>
-                    <option value="active">활성 봇</option>
-                    <option value="inactive">비활성 봇</option>
-                  </select>
+                    onChange={setStatusFilter}
+                    options={statusOptions}
+                  />
                 </div>
               </div>
             </div>
@@ -232,63 +309,34 @@ const BotList = () => {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    {/* 이름 헤더 */}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => handleSort('name')}
-                    >
-                      <div className="flex items-center">
-                        봇 이름
-                        {sortField === 'name' && (
-                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
-                        )}
-                      </div>
-                    </th>
-
-                    {/* 상태 헤더 */}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => handleSort('status')}
-                    >
-                      <div className="flex items-center">
-                        상태
-                        {sortField === 'status' && (
-                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
-                        )}
-                      </div>
-                    </th>
-
-                    {/* 생성일 헤더 */}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => handleSort('created')}
-                    >
-                      <div className="flex items-center">
-                        생성일
-                        {sortField === 'created' && (
-                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
-                        )}
-                      </div>
-                    </th>
-
-                    {/* 사용량 헤더 */}
-                    <th
-                      scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => handleSort('usageCount')}
-                    >
-                      <div className="flex items-center">
-                        누적 사용량
-                        {sortField === 'usageCount' && (
-                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
-                        )}
-                      </div>
-                    </th>
-
-                    {/* 작업 헤더 */}
+                    <TableHeader
+                      label="봇 이름"
+                      field="name"
+                      sortField={sortField}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <TableHeader
+                      label="상태"
+                      field="status"
+                      sortField={sortField}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <TableHeader
+                      label="생성일"
+                      field="created"
+                      sortField={sortField}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
+                    <TableHeader
+                      label="누적 사용량"
+                      field="usageCount"
+                      sortField={sortField}
+                      sortDirection={sortDirection}
+                      onSort={handleSort}
+                    />
                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       작업
                     </th>
@@ -297,8 +345,12 @@ const BotList = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {sortedBots.length > 0 ? (
                     sortedBots.map((bot) => (
-                      <tr key={bot.id} className="hover:bg-gray-50 transition-colors">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                      <tr
+                        key={bot.id}
+                        className="hover:bg-gray-50 transition-colors cursor-pointer"
+                        onClick={() => handleViewDetails(bot.id)}
+                      >
+                        <td className="px-6 py-4">
                           <div className="flex items-center">
                             <div>
                               <div className="text-sm font-medium text-gray-900">{bot.name}</div>
@@ -307,7 +359,7 @@ const BotList = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 rounded-full text-xs border ${getStatusBadgeStyle(bot.status)}`}>
+                          <span className={`px-3 py-1 rounded-full text-xs border ${getStatusBadgeStyle(bot.status)}`}>
                             {bot.status === 'active' ? '활성' : '비활성'}
                           </span>
                         </td>
@@ -317,24 +369,17 @@ const BotList = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {bot.usageCount.toLocaleString()}회
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex space-x-3">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex space-x-4">
                             <button
-                              onClick={() => handleViewDetails(bot.id)}
-                              className="text-sky-600 hover:text-sky-900 transition-colors"
-                              title="상세보기"
-                            >
-                              <ExternalLink size={18} />
-                            </button>
-                            <button
-                              onClick={() => handleChatClick(bot)}
-                              className="text-green-600 hover:text-green-800 transition-colors"
+                              onClick={(e) => handleChatClick(e, bot)}
+                              className="text-sky-600 hover:text-sky-800 transition-colors"
                               title="채팅 테스트"
                             >
                               <MessageCircle size={18} />
                             </button>
                             <button
-                              onClick={() => handleDeleteClick(bot)}
+                              onClick={(e) => handleDeleteClick(e, bot)}
                               className="text-red-600 hover:text-red-800 transition-colors"
                               title="삭제"
                             >

@@ -305,8 +305,7 @@ const UserAddModal = ({ isOpen, onClose, onSuccess }) => {
               {/* 보안 설정 섹션 */}
               <div className="pt-4 border-t border-gray-200">
                 <h3 className="text-md font-medium text-gray-800 mb-4 flex items-center">
-                  <Key size={16} className="text-sky-500 mr-2" />
-                  보안 설정
+                  계정 비밀번호
                 </h3>
 
                 <div className="space-y-4">
@@ -317,7 +316,7 @@ const UserAddModal = ({ isOpen, onClose, onSuccess }) => {
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Key size={16} className="text-gray-400" />
+
                       </div>
                       <input
                         id="password"
@@ -342,7 +341,7 @@ const UserAddModal = ({ isOpen, onClose, onSuccess }) => {
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Key size={16} className="text-gray-400" />
+
                       </div>
                       <input
                         id="passwordConfirm"
