@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Home, Bot, FileText, BarChart2, Users, Settings, HelpCircle, PlusCircle, ChevronRight, List, UserPlus } from 'lucide-react';
+import { Home, Bot, FileText, BarChart2, Users, Settings, HelpCircle, PlusCircle, ChevronRight, List} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
