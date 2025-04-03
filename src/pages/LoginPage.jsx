@@ -224,11 +224,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           {/* 헤더 */}
           <div className="bg-navy-800 py-6 px-8 text-center">
-            <div className="flex justify-center mb-4">
-              <div className="w-12 h-12 rounded-full bg-sky-500 flex items-center justify-center text-white">
-                <Bot size={24} />
-              </div>
-            </div>
+
             <h4 className="text-2xl font-bold text-white">
               <span className="text-white">Chat</span><span className="text-sky-300">Bot</span> Studio
             </h4>
