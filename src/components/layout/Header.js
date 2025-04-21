@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Bell, LogOut, ChevronDown, ChevronUp, User, Key, Globe} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 const Header = ({ userName = 'Admin', companyName = 'CPLABS', plan = '무료' }) => {
   const { t, i18n } = useTranslation();
@@ -52,9 +53,9 @@ const Header = ({ userName = 'Admin', companyName = 'CPLABS', plan = '무료' })
   return (
     <header className="bg-navy-800 text-white h-16 flex items-center justify-between px-6 shadow-md">
       <div className="flex items-center">
-        <div className="font-bold text-xl">
+        <Link to="/" className="font-bold text-xl cursor-pointer hover:opacity-90 transition-opacity">
           <span className="text-white">Chat</span><span className="text-sky-300">Bot</span> Studio <span className="text-xs bg-blue-600 text-white ml-1 px-2 py-0.5 rounded-full">Beta</span>
-        </div>
+        </Link>
       </div>
 
       <div className="flex items-center space-x-6">
