@@ -34,6 +34,14 @@ const Step2LLMSettings = ({
   handleEditModel,
   handleDeleteModel
 }) => {
+  // API 응답 데이터에 대한 안전성 처리
+  const safeOrigins = Array.isArray(llmOrigins) ? llmOrigins : [];
+  const safeModels = Array.isArray(llmModels) ? llmModels : [];
+
+  // 디버깅을 위한 콘솔 로그 추가
+  console.log('LLM Origins:', llmOrigins);
+  console.log('LLM Models:', llmModels);
+
   return (
     <div className="space-y-6">
       <div className="bg-white p-6 rounded-lg shadow-md">
@@ -69,7 +77,7 @@ const Step2LLMSettings = ({
             <div className="flex justify-center py-6">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-          ) : llmOrigins.length === 0 ? (
+          ) : safeOrigins.length === 0 ? (
             <div className="text-center py-10 bg-gray-50 rounded-lg border border-gray-200">
               <Server size={40} className="mx-auto text-gray-400 mb-3" />
               <p className="text-gray-500 mb-2">등록된 LLM 오리진이 없습니다</p>
@@ -87,7 +95,7 @@ const Step2LLMSettings = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {llmOrigins.map(origin => (
+              {safeOrigins.map(origin => (
                 <div
                   key={origin.id}
                   onClick={() => {
@@ -205,7 +213,7 @@ const Step2LLMSettings = ({
             <div className="flex justify-center py-6">
               <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
             </div>
-          ) : llmModels.length === 0 ? (
+          ) : safeModels.length === 0 ? (
             <div className="text-center py-10 bg-gray-50 rounded-lg border border-gray-200">
               <Cpu size={40} className="mx-auto text-gray-400 mb-3" />
               <p className="text-gray-500 mb-2">등록된 LLM 모델이 없습니다</p>
@@ -223,7 +231,7 @@ const Step2LLMSettings = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {llmModels.map(model => (
+              {safeModels.map(model => (
                 <div
                   key={model.id}
                   onClick={() => {
@@ -254,7 +262,7 @@ const Step2LLMSettings = ({
                       <div>
                         <h4 className="font-medium text-gray-800">{model.model_name}</h4>
                         <p className="text-xs text-gray-500 mt-1">
-                          Context: {model.context_length.toLocaleString()}
+                          Context: {model.context_length ? model.context_length.toLocaleString() : 'N/A'}
                         </p>
                       </div>
                     </div>

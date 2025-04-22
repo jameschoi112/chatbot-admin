@@ -15,9 +15,27 @@ const promptService = {
       const response = await axios.get(PROMPT_ENDPOINTS.PROMPTS, {
         headers: getHeaders()
       });
+
+      // 응답 로깅 및 안전 처리
+      console.log('Prompt API Response:', response.data);
+
+      // 배열이 아닌 경우 빈 배열 반환
+      if (!Array.isArray(response.data)) {
+        console.warn('Unexpected API response format for prompts:', response.data);
+        return [];
+      }
+
       return response.data;
     } catch (error) {
-      throw new Error('프롬프트 목록을 가져오는데 실패했습니다: ' + error.message);
+      console.error('프롬프트 목록을 가져오는데 실패했습니다:', error);
+      // 에러 상세 정보 로깅
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      }
+
+      // 오류 발생 시 빈 배열 반환
+      return [];
     }
   },
 
@@ -33,6 +51,7 @@ const promptService = {
       });
       return response.data;
     } catch (error) {
+      console.error('프롬프트 정보를 가져오는데 실패했습니다:', error);
       throw new Error('프롬프트 정보를 가져오는데 실패했습니다: ' + error.message);
     }
   },
@@ -49,6 +68,7 @@ const promptService = {
       });
       return response.data;
     } catch (error) {
+      console.error('프롬프트 생성에 실패했습니다:', error);
       throw new Error('프롬프트 생성에 실패했습니다: ' + error.message);
     }
   },
@@ -66,6 +86,7 @@ const promptService = {
       });
       return response.data;
     } catch (error) {
+      console.error('프롬프트 업데이트에 실패했습니다:', error);
       throw new Error('프롬프트 업데이트에 실패했습니다: ' + error.message);
     }
   },
@@ -81,6 +102,7 @@ const promptService = {
         headers: getHeaders()
       });
     } catch (error) {
+      console.error('프롬프트 삭제에 실패했습니다:', error);
       throw new Error('프롬프트 삭제에 실패했습니다: ' + error.message);
     }
   },
@@ -95,9 +117,21 @@ const promptService = {
       const response = await axios.get(PROMPT_ENDPOINTS.PROMPT_HISTORY(id), {
         headers: getHeaders()
       });
+
+      // 응답 로깅 및 안전 처리
+      console.log('Prompt History API Response:', response.data);
+
+      // 배열이 아닌 경우 빈 배열 반환
+      if (!Array.isArray(response.data)) {
+        console.warn('Unexpected API response format for prompt history:', response.data);
+        return [];
+      }
+
       return response.data;
     } catch (error) {
-      throw new Error('프롬프트 히스토리를 가져오는데 실패했습니다: ' + error.message);
+      console.error('프롬프트 히스토리를 가져오는데 실패했습니다:', error);
+      // 오류 발생 시 빈 배열 반환
+      return [];
     }
   },
 
@@ -116,6 +150,7 @@ const promptService = {
       );
       return response.data;
     } catch (error) {
+      console.error('프롬프트 롤백에 실패했습니다:', error);
       throw new Error('프롬프트 롤백에 실패했습니다: ' + error.message);
     }
   },
@@ -127,11 +162,19 @@ const promptService = {
    */
   invokeLlm: async (data) => {
     try {
+      console.log('LLM 호출 요청 데이터:', data);
       const response = await axios.post(PROMPT_ENDPOINTS.INVOKE_LLM, data, {
         headers: getHeaders()
       });
+      console.log('LLM 호출 응답:', response.data);
       return response.data;
     } catch (error) {
+      console.error('LLM 호출에 실패했습니다:', error);
+      // 에러 상세 정보 로깅
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      }
       throw new Error('LLM 호출에 실패했습니다: ' + error.message);
     }
   },
@@ -144,11 +187,19 @@ const promptService = {
    */
   invokeSession: async (sessionId, data) => {
     try {
+      console.log(`세션 ${sessionId} 호출 요청 데이터:`, data);
       const response = await axios.post(PROMPT_ENDPOINTS.INVOKE_SESSION(sessionId), data, {
         headers: getHeaders()
       });
+      console.log(`세션 ${sessionId} 호출 응답:`, response.data);
       return response.data;
     } catch (error) {
+      console.error('세션 호출에 실패했습니다:', error);
+      // 에러 상세 정보 로깅
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      }
       throw new Error('세션 호출에 실패했습니다: ' + error.message);
     }
   }

@@ -102,10 +102,20 @@ const CreateBot = () => {
     setIsLoadingOrigins(true);
     try {
       const origins = await originService.getAllOrigins();
-      setLlmOrigins(origins);
+      // API 응답 형식 확인 및 로깅
+      console.log('Fetched origins:', origins);
+
+      if (Array.isArray(origins)) {
+        setLlmOrigins(origins);
+      } else {
+        console.error('Expected origins to be an array, got:', typeof origins);
+        setErrors(prev => ({ ...prev, step2: '오리진 목록 형식이 올바르지 않습니다.' }));
+        setLlmOrigins([]);
+      }
     } catch (error) {
-      console.error(error.message);
+      console.error('오리진 목록을 불러오는 중 오류 발생:', error);
       setErrors(prev => ({ ...prev, step2: '오리진 목록을 불러오는데 실패했습니다.' }));
+      setLlmOrigins([]);
     } finally {
       setIsLoadingOrigins(false);
     }
@@ -118,10 +128,20 @@ const CreateBot = () => {
     setIsLoadingModels(true);
     try {
       const models = await modelService.getModelsByOrigin(botData.llm_origin_id);
-      setLlmModels(models);
+      // API 응답 형식 확인 및 로깅
+      console.log('Fetched models:', models);
+
+      if (Array.isArray(models)) {
+        setLlmModels(models);
+      } else {
+        console.error('Expected models to be an array, got:', typeof models);
+        setErrors(prev => ({ ...prev, step2: '모델 목록 형식이 올바르지 않습니다.' }));
+        setLlmModels([]);
+      }
     } catch (error) {
-      console.error(error.message);
+      console.error('모델 목록을 불러오는 중 오류 발생:', error);
       setErrors(prev => ({ ...prev, step2: '모델 목록을 불러오는데 실패했습니다.' }));
+      setLlmModels([]);
     } finally {
       setIsLoadingModels(false);
     }
@@ -157,8 +177,8 @@ const CreateBot = () => {
       resetOriginModal();
       setShowOriginModal(false);
     } catch (error) {
-      console.error(error.message);
-      alert('오리진 저장에 실패했습니다.');
+      console.error('오리진 저장 중 오류 발생:', error);
+      alert('오리진 저장에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
     } finally {
       setIsSavingOrigin(false);
     }
@@ -194,8 +214,8 @@ const CreateBot = () => {
       resetModelModal();
       setShowModelModal(false);
     } catch (error) {
-      console.error(error.message);
-      alert('모델 저장에 실패했습니다.');
+      console.error('모델 저장 중 오류 발생:', error);
+      alert('모델 저장에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
     } finally {
       setIsSavingModel(false);
     }
@@ -222,8 +242,8 @@ const CreateBot = () => {
         }));
       }
     } catch (error) {
-      console.error(error.message);
-      alert('오리진 삭제에 실패했습니다.');
+      console.error('오리진 삭제 중 오류 발생:', error);
+      alert('오리진 삭제에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
     }
   };
 
@@ -247,8 +267,8 @@ const CreateBot = () => {
         }));
       }
     } catch (error) {
-      console.error(error.message);
-      alert('모델 삭제에 실패했습니다.');
+      console.error('모델 삭제 중 오류 발생:', error);
+      alert('모델 삭제에 실패했습니다: ' + (error.message || '알 수 없는 오류'));
     }
   };
 
@@ -293,7 +313,7 @@ const CreateBot = () => {
   const handleEditModel = (model) => {
     setEditingModelId(model.id);
     setModelFormData({
-      origin_id: model.origin.toString(),
+      origin_id: model.origin?.toString() || model.origin_id?.toString() || '',
       model_name: model.model_name,
       context_length: model.context_length,
       max_output_tokens: model.max_output_tokens,
@@ -352,6 +372,7 @@ const CreateBot = () => {
   // 오리진 선택 시 모델 목록 업데이트
   useEffect(() => {
     if (botData.llm_origin_id) {
+      console.log('오리진 변경 감지. 모델 목록 업데이트:', botData.llm_origin_id);
       fetchLlmModels();
 
       // 모델 모달 폼 초기값 업데이트
@@ -364,6 +385,7 @@ const CreateBot = () => {
 
   // 컴포넌트 마운트 시 오리진 목록 가져오기
   useEffect(() => {
+    console.log('컴포넌트 마운트. 오리진 목록 가져오기 시작');
     fetchLlmOrigins();
   }, []);
 
@@ -439,6 +461,7 @@ const CreateBot = () => {
       // TODO: 실제 봇 생성 API 호출
       // const response = await botService.createBot(botData);
       // 임시 시뮬레이션
+      console.log('봇 생성 요청:', botData);
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       setSavedSuccess(true);

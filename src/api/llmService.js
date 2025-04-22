@@ -15,9 +15,31 @@ const originService = {
       const response = await axios.get(LLM_ENDPOINTS.ORIGINS, {
         headers: getHeaders()
       });
+
+      // 응답 확인 및 안전 처리
+      console.log('Origin API Response:', response.data);
+
+      // 배열이 아닌 경우 빈 배열 반환
+      if (!Array.isArray(response.data)) {
+        console.warn('Unexpected API response format for origins:', response.data);
+        return [];
+      }
+
       return response.data;
     } catch (error) {
-      throw new Error('오리진 목록을 가져오는데 실패했습니다: ' + error.message);
+      console.error('오리진 목록을 가져오는데 실패했습니다:', error);
+      // 에러 로깅 향상
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+      } else {
+        console.error('Error Message:', error.message);
+      }
+
+      // 오류 발생 시 빈 배열 반환
+      return [];
     }
   },
 
@@ -33,6 +55,7 @@ const originService = {
       });
       return response.data;
     } catch (error) {
+      console.error('오리진 정보를 가져오는데 실패했습니다:', error);
       throw new Error('오리진 정보를 가져오는데 실패했습니다: ' + error.message);
     }
   },
@@ -49,6 +72,7 @@ const originService = {
       });
       return response.data;
     } catch (error) {
+      console.error('오리진 생성에 실패했습니다:', error);
       throw new Error('오리진 생성에 실패했습니다: ' + error.message);
     }
   },
@@ -66,6 +90,7 @@ const originService = {
       });
       return response.data;
     } catch (error) {
+      console.error('오리진 업데이트에 실패했습니다:', error);
       throw new Error('오리진 업데이트에 실패했습니다: ' + error.message);
     }
   },
@@ -81,6 +106,7 @@ const originService = {
         headers: getHeaders()
       });
     } catch (error) {
+      console.error('오리진 삭제에 실패했습니다:', error);
       throw new Error('오리진 삭제에 실패했습니다: ' + error.message);
     }
   }
@@ -99,9 +125,27 @@ const modelService = {
       const response = await axios.get(LLM_ENDPOINTS.MODELS, {
         headers: getHeaders()
       });
+
+      // 응답 확인 및 안전 처리
+      console.log('Models API Response:', response.data);
+
+      // 배열이 아닌 경우 빈 배열 반환
+      if (!Array.isArray(response.data)) {
+        console.warn('Unexpected API response format for models:', response.data);
+        return [];
+      }
+
       return response.data;
     } catch (error) {
-      throw new Error('모델 목록을 가져오는데 실패했습니다: ' + error.message);
+      console.error('모델 목록을 가져오는데 실패했습니다:', error);
+      // 에러 로깅 향상
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      }
+
+      // 오류 발생 시 빈 배열 반환
+      return [];
     }
   },
 
@@ -115,10 +159,32 @@ const modelService = {
       const response = await axios.get(LLM_ENDPOINTS.MODELS, {
         headers: getHeaders()
       });
+
+      // 응답 확인 및 안전 처리
+      console.log(`Models by Origin (${originId}) API Response:`, response.data);
+
+      // 배열이 아닌 경우 빈 배열 반환
+      if (!Array.isArray(response.data)) {
+        console.warn('Unexpected API response format for models by origin:', response.data);
+        return [];
+      }
+
       // 서버에서 필터링 API가 없는 경우 클라이언트에서 필터링
-      return response.data.filter(model => model.origin === parseInt(originId));
+      const filteredModels = response.data.filter(model =>
+        model.origin === parseInt(originId) || model.origin_id === parseInt(originId)
+      );
+
+      return filteredModels;
     } catch (error) {
-      throw new Error('모델 목록을 가져오는데 실패했습니다: ' + error.message);
+      console.error('모델 목록을 가져오는데 실패했습니다:', error);
+      // 에러 로깅 향상
+      if (error.response) {
+        console.error('Error Response Data:', error.response.data);
+        console.error('Error Response Status:', error.response.status);
+      }
+
+      // 오류 발생 시 빈 배열 반환
+      return [];
     }
   },
 
@@ -134,6 +200,7 @@ const modelService = {
       });
       return response.data;
     } catch (error) {
+      console.error('모델 정보를 가져오는데 실패했습니다:', error);
       throw new Error('모델 정보를 가져오는데 실패했습니다: ' + error.message);
     }
   },
@@ -150,6 +217,7 @@ const modelService = {
       });
       return response.data;
     } catch (error) {
+      console.error('모델 생성에 실패했습니다:', error);
       throw new Error('모델 생성에 실패했습니다: ' + error.message);
     }
   },
@@ -167,6 +235,7 @@ const modelService = {
       });
       return response.data;
     } catch (error) {
+      console.error('모델 업데이트에 실패했습니다:', error);
       throw new Error('모델 업데이트에 실패했습니다: ' + error.message);
     }
   },
@@ -182,6 +251,7 @@ const modelService = {
         headers: getHeaders()
       });
     } catch (error) {
+      console.error('모델 삭제에 실패했습니다:', error);
       throw new Error('모델 삭제에 실패했습니다: ' + error.message);
     }
   }
