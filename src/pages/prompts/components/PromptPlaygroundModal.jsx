@@ -94,11 +94,42 @@ const PromptPlaygroundModal = ({ isOpen, onClose, prompt }) => {
         user_message: userMessage
       });
 
+      console.log('LLM 응답:', response); // 디버깅을 위한 로그 추가
+
+      // 응답 처리 로직 개선
+      let responseContent = '응답 없음';
+
+      // 응답이 객체인 경우 적절한 필드 확인
+      if (response) {
+        if (typeof response === 'string') {
+          responseContent = response;
+        } else if (typeof response === 'object') {
+          // API 응답 구조에 맞게 처리
+          // 주요 응답 필드 확인 (공유해주신 구조에 맞게 수정)
+          if (response.content) {
+            // OpenAI/Claude 스타일 응답 구조
+            responseContent = response.content;
+          } else if (response.choices && response.choices.length > 0) {
+            // OpenAI 스타일 응답 (다른 형태)
+            responseContent = response.choices[0].message?.content || response.choices[0].text;
+          } else if (response.text) {
+            // 텍스트 직접 응답
+            responseContent = response.text;
+          } else if (response.message) {
+            // 메시지 형태 응답
+            responseContent = response.message;
+          } else {
+            // 기타 형태: 객체를 문자열화
+            responseContent = JSON.stringify(response);
+          }
+        }
+      }
+
       // 응답 추가
       const botMsg = {
         id: Date.now() + 1,
         role: 'assistant',
-        content: response.text || response.message || '응답 없음'
+        content: responseContent
       };
 
       setMessages(prev => [...prev, botMsg]);
