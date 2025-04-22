@@ -229,7 +229,7 @@ const Step4Messengers = ({
                         }
                       });
                     }}
-                    placeholder="xoxb-1234567890-1234567890123-abcdefghijklmnopqrstuvwx"
+                    placeholder="token을 입력하세요."
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <p className="mt-1 text-xs text-gray-500">
