@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { EyeIcon, EyeOffIcon, LockIcon, UserIcon, X, Mail, Building, User, Bot, AlertCircle, Info } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, LockIcon, UserIcon, X, Mail, Building, User, AlertCircle} from 'lucide-react';
 import backgroundImage from '../assets/background.png'; // 배경 이미지 import
 import logoImage from '../assets/logo.png'; // 로고 이미지 import
 
@@ -229,7 +229,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
       }}
     >
       {/* 배경 오버레이 */}
-      <div className="absolute inset-0 bg-black bg-opacity-30 "></div>
+      <div className="absolute inset-0 bg-black bg-opacity-40 "></div>
 
       {/* 새로운 2단 레이아웃 컨테이너 */}
       <div className="container mx-auto z-10 flex flex-col md:flex-row items-center justify-between max-w-6xl">

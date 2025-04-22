@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Send, Bot, AlertCircle, Settings, MoreVertical, Mic, Paperclip, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Send, Bot, Settings, Mic, Paperclip, Maximize2, Minimize2 } from 'lucide-react';
 
 const BotChatModal = ({ isOpen, onClose, bot }) => {
   const [messages, setMessages] = useState([

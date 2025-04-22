@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Home, Bot, FileText, BarChart2, Users, Settings, HelpCircle, PlusCircle, ChevronRight, List} from 'lucide-react';
+import { Home, Bot, FileText, BarChart2, Users, Settings, HelpCircle, PlusCircle, ChevronRight, List, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -19,12 +18,21 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
       path: '/bots',
       hasSubMenu: true,
       subMenuItems: [
-        { id: 'bot-list', label: t('sidebar.botManagement'), icon: Bot, path: '/bots' },
+        { id: 'bot-list', label: t('sidebar.botManagement'), icon: List, path: '/bots' },
         { id: 'create-bot', label: t('sidebar.createBot'), icon: PlusCircle, path: '/create-bot' }
       ]
     },
-    { id: 'documents', label: t('sidebar.documents'), icon: FileText, path: '/documents' },
-    { id: 'analytics', label: t('sidebar.analytics'), icon: BarChart2, path: '/analytics' },
+    {
+      id: 'bot-data',
+      label: '봇 데이터 관리',
+      icon: Database,
+      path: '/bot-data',
+      hasSubMenu: true,
+      subMenuItems: [
+        { id: 'prompts', label: '프롬프트 관리', icon: FileText, path: '/prompts' },
+        { id: 'documents', label: t('sidebar.documents'), icon: FileText, path: '/documents' }
+      ]
+    },
     {
       id: 'users',
       label: t('sidebar.userManagement'),
@@ -33,7 +41,6 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
       hasSubMenu: true,
       subMenuItems: [
         { id: 'user-list', label: t('sidebar.userList'), icon: List, path: '/users' }
-
       ]
     },
     { id: 'settings', label: t('sidebar.settings'), icon: Settings, path: '/settings' }
@@ -53,8 +60,18 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
     }
   };
 
-  const handleSubMenuClick = (path, e) => {
+  const handleSubMenuClick = (path, e, parentId) => {
     e.stopPropagation(); // 상위 메뉴 클릭 이벤트가 발생하지 않도록 함
+
+    // 현재 메뉴가 이미 확장되어 있는지 확인
+    const isCurrentlyExpanded = expandedMenus.includes(parentId);
+
+    // 메뉴가 확장되어 있지 않다면 확장
+    if (!isCurrentlyExpanded) {
+      setExpandedMenus(prev => [...prev, parentId]);
+    }
+
+    // 해당 경로로 이동
     navigate(path);
   };
 
@@ -68,7 +85,8 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isExpanded = expandedMenus.includes(item.id);
-          const isActive = activeMenu === item.id;
+          const isActive = activeMenu === item.id ||
+                          (item.hasSubMenu && item.subMenuItems.some(subItem => activeMenu === subItem.id));
           const hasSubMenu = item.hasSubMenu && item.subMenuItems && item.subMenuItems.length > 0;
 
           return (
@@ -119,7 +137,7 @@ const Sidebar = ({ activeMenu = 'dashboard' }) => {
                               ? 'bg-gray-800 text-white'
                               : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
                           } ${isExpanded ? 'translate-x-0' : '-translate-x-4'}`}
-                          onClick={(e) => handleSubMenuClick(subItem.path, e)}
+                          onClick={(e) => handleSubMenuClick(subItem.path, e, item.id)}
                         >
                           <div className={`h-1 w-1 rounded-full mr-3 transition-all duration-200 ${
                             isSubActive ? 'bg-sky-400' : 'bg-gray-500'
